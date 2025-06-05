@@ -344,7 +344,11 @@ class ImageAdapter(
             }
             notifyItemChanged(position, ImageUnselected())
         } else {
-            val image = images[position]
+            val image = if (showAlreadyActionedImages) {
+                images[position]
+            } else {
+                ArrayList(actionableImagesMap.values)[position]
+            }
             scope.launch(ioDispatcher) {
                 val imageSHA1 = imageLoader.getSHA1(image, defaultDispatcher)
                 withContext(Dispatchers.Main) {
